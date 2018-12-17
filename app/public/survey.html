@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>FriendFinder</title>
+        <title>FriendFinder Survey</title>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery.js"></script>
@@ -146,87 +146,87 @@
 
             <hr>
             <footer class="footer">
-                <div class="container">
-                    <p><a href="/api" target="_blank">API Friends List</a> | <a href="https://github.com/katerinewh/FriendFinder" target="_blank">GitHub Repo</a></p>
+                    <div class="container">
+                            <p><a href="/api" target="_blank">API Friends List</a> | <a href="https://github.com/katerinewh/FriendFinder" target="_blank">GitHub Repo</a></p>
+                        </div>
+                    </footer>
+        
+                </div><!-- container end -->
+        
+                <!-- modal for displaying results -->
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content text-center">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Here is your best match:</h4>
+                            </div>
+                            <div class="modal-body">
+                                <img id="modalImage" class="well" src="" alt="" height="300">
+                                <h3 id="modalName" class="text-danger"></h3>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </footer>
-
-        </div><!-- container end -->
-
-        <!-- modal for displaying results -->
-        <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content text-center">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Here is your best match:</h4>
-                    </div>
-                    <div class="modal-body">
-                        <img id="modalImage" class="well" src="" alt="" height="300">
-                        <h3 id="modalName" class="text-danger"></h3>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script type="text/javascript">
-            $(document).ready(function () {
-                //click handler for submit button
-                $( '#submit' ).on( 'click', function ( event ) {
-                    event.preventDefault();
-                    let newFriend = {};
-                    //flag variable for validation
-                    let inputComplete = false;
-                    //capturing values from form inputs
-                    let name = $( '#name' ).val().trim();
-                    let photo = $( '#image' ).val().trim();
-                    //triggering warning message if inputs are incomplete
-                    if ( name === '' || photo === '') {
-                        inputComplete = false;
-                        $( '.error' ).empty();
-                        $( '.error' ).text( '  You must fill out this field!' )
-                    } else {
-                        inputComplete = true;
-                    }
-                    if ( inputComplete ) {
-                        //creating object from inputs/questions
-                        $( '.error' ).empty();
-                        let newFriend = {
-                            name,
-                            photo,
-                            scores:[]
-                        }
-                        //loop that pushes values of questions into newFriend
-                        //object, and clears inputs.  If user chose not to, or 
-                        //failed to answer a question, a default neutral value 
-                        //is assigned.  This mechanism is used in place of user 
-                        //input validation on the questions to allow user to save 
-                        // time on questions they are neutral about.
-                        for ( let i = 1; i <= 10; i++ ) {
-                            let score = $( '#q'+ i ).val() || "3"
-                            newFriend.scores.push( score );
-                            $( '#q'+ i ).val('').selectpicker('refresh');
-                        }
-                        //clearing inputs
-                        $( '#name' ).val( '' );
-                        $( '#image' ).val( '' );
-                        //posting new user to the api
-                        $.post("/api/friends", newFriend)
-                            .done(function(data) {   
-                            console.log('data:',data)
+        
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        //click handler for submit button
+                        $( '#submit' ).on( 'click', function ( event ) {
+                            event.preventDefault();
+                            let newFriend = {};
+                            //flag variable for validation
+                            let inputComplete = false;
+                            //capturing values from form inputs
+                            let name = $( '#name' ).val().trim();
+                            let photo = $( '#image' ).val().trim();
+                            //triggering warning message if inputs are incomplete
+                            if ( name === '' || photo === '') {
+                                inputComplete = false;
+                                $( '.error' ).empty();
+                                $( '.error' ).text( '  You must fill out this field!' )
+                            } else {
+                                inputComplete = true;
+                            }
+                            if ( inputComplete ) {
+                                //creating object from inputs/questions
+                                $( '.error' ).empty();
+                                let newFriend = {
+                                    name,
+                                    photo,
+                                    scores:[]
+                                }
+                                //loop that pushes values of questions into newFriend
+                                //object, and clears inputs.  If user chose not to, or 
+                                //failed to answer a question, a default neutral value 
+                                //is assigned.  This mechanism is used in place of user 
+                                //input validation on the questions to allow user to save 
+                                // time on questions they are neutral about.
+                                for ( let i = 1; i <= 10; i++ ) {
+                                    let score = $( '#q'+ i ).val() || "3"
+                                    newFriend.scores.push( score );
+                                    $( '#q'+ i ).val('').selectpicker('refresh');
+                                }
+                                //clearing inputs
+                                $( '#name' ).val( '' );
+                                $( '#image' ).val( '' );
+                                //posting new user to the api
+                                $.post("/api/friends", newFriend)
+                                    .done(function(data) {   
+                                    console.log('data:',data)
+                                });
+                                //getting best match data from backend, and passing the data to the modal
+                                $.get("/bestFriend", function (data2) {
+                                    $('#myModal').modal('toggle');
+                                    $('#modalName').text(data2.friend.name);
+                                    $('#modalImage').attr("src", data2.friend.photo);
+                                });	
+                            }
                         });
-                        //getting best match data from backend, and passing the data to the modal
-                        $.get("/bestFriend", function (data2) {
-                            $('#myModal').modal('toggle');
-                            $('#modalName').text(data2.friend.name);
-                            $('#modalImage').attr("src", data2.friend.photo);
-                        });	
-                    }
-                });
-            });
-        </script>
-    </body>
-</html>
+                    });
+                </script>
+            </body>
+        </html>

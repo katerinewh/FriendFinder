@@ -2,7 +2,7 @@ module.exports = {
     array: [
         {
             name: 'Flooty McPlasticnose',
-            photo: '/images/pic1.jpg',
+            photo: 'images/pic1.jpg',
             scores: ['1', '1', '5', '1', '1', '1', '1', '1', '1', '1']
         },
         {
