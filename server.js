@@ -1,26 +1,25 @@
 
 //imported files
-var htmlRoutes = require("./app/routing/htmlRoutes.js");
-var apiRoutes = require("./app/routing/apiRoutes.js");
+var htmlRoutes = require("./app/routes/htmlRoutes.js");
+var apiRoutes = require("./app/routes/apiRoutes.js");
 var friends = require('./app/data/friends.js');
 
 //dependencies
 var express = require('express');
-var bodyParser = require('body-parser');
 var path = require('path');
 var app = express();
 
 //port selection
 var PORT = process.env.PORT || 8080;
 
-//initializing body-parser
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// Sets up the Express app to handle data parsing
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(express.static(path.join(__dirname, './app/public')))
 //importing routes
-htmlRoutes(app, path);
-apiRoutes(app);
+require("./app/routes/apiRoutes")(app);
+require("./app/routes/htmlRoutes")(app);
 
 //function that compares user scores to find the closest match
 module.exports.lookForFriends = function () {

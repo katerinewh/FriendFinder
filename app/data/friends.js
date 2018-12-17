@@ -19,7 +19,7 @@ module.exports = {
             name: 'George McDreamy',
             photo: '/images/pic4.jpg',
             scores: ['5', '6', '5', '1', '2', '1', '4', '6', '6', '2']
-        }
+        },
         {
             name: 'Long Duck Dong',
             photo: '/images/pic5.jpg',
